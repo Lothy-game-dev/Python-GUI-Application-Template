@@ -1,0 +1,22 @@
+[run]
+# Specify the source directories/files to measure
+source = ./app, ./app/controllers, ./app/models, ./app/database, ./app/repositories
+
+[report]
+# Omit certain files from the coverage report
+omit = 
+    tests/*           # Exclude the entire tests directory
+    app/hidden_web_run.py
+    app/web_run.py
+    app/sqlite_process.py
+    app/config.py
+
+# Display lines missing coverage
+show_missing = True
+
+# Fail the build if coverage is below 80%
+fail_under = 80
+
+[html]
+# Directory for the HTML report output
+directory = coverage_html_report

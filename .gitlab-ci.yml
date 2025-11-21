@@ -1,0 +1,33 @@
+# Define the stages of the CI/CD pipeline
+stages:
+  - lint
+  - format
+  - test
+
+# Job for linting the code with pylint
+lint:
+  stage: lint
+  image: python:3.12  # Use a Python image
+  before_script:
+    - pip install pylint  # Install pylint
+  script:
+    - make lint # Run pylint on your source and test directories
+  artifacts:
+    paths:
+      - pylint-report.txt  # Collect the pylint report
+
+format:
+  stage: format
+  image: python:3.12
+  before_script:
+    - pip install black  # Install black
+  script:
+    - make format-check
+
+test:
+  stage: test
+  image: python:3.12
+  before_script:
+    - make req-mac  # Install pytest
+  script:
+    - make test

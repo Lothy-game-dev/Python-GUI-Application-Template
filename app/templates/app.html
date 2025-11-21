@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Excelファイルをアップロード</title>
+    <!-- <link rel="stylesheet" href="../static/css/test.css" /> -->
+    <link rel="stylesheet" href="../static/css/styles.css" />
+  </head>
+  <body>
+    <div class="sidebar">
+      <div style="width: 100%; display: flex; justify-content: center">
+      </div>
+      <div class="sidebar-dropdown">
+        <div onclick="toggleDropdownSidebar()" class="dropdown-tabs">
+          e - Tax
+          <svg
+            class="arrow-icon"
+            width="15"
+            height="15"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 320 512"
+          >
+            <path
+              d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"
+            />
+          </svg>
+        </div>
+        <!-- <div class="tabs">
+          <button
+            class="tab"
+            onclick="switchTab(event, 'validateTax'); event.stopPropagation()"
+          >
+            法定調書の文字チェック
+          </button>
+        </div>
+        <div class="tabs">
+          <button
+            class="tab"
+            onclick="switchTab(event, 'navitime'); event.stopPropagation()"
+          >
+            Navitime
+          </button>
+        </div> -->
+      </div>
+    </div>
+    <div class="main-content">
+      <div class="dashboard"></div>
+
+      <!-- <div id="tab3" class="tab-content" style="position: relative"> -->
+      <div class="tab-content validateTax" style="position: relative">
+        <div class="header"></div>
+        <h1>法定調書の文字チェック</h1>
+        <div class="dropdown">
+          <button onclick="toggleDropdown()">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="30"
+              height="30"
+              class="ionicon arrow-icon"
+              viewBox="0 0 512 512"
+            >
+              <path
+                d="M262.29 192.31a64 64 0 1057.4 57.4 64.13 64.13 0 00-57.4-57.4zM416.39 256a154.34 154.34 0 01-1.53 20.79l45.21 35.46a10.81 10.81 0 012.45 13.75l-42.77 74a10.81 10.81 0 01-13.14 4.59l-44.9-18.08a16.11 16.11 0 00-15.17 1.75A164.48 164.48 0 01325 400.8a15.94 15.94 0 00-8.82 12.14l-6.73 47.89a11.08 11.08 0 01-10.68 9.17h-85.54a11.11 11.11 0 01-10.69-8.87l-6.72-47.82a16.07 16.07 0 00-9-12.22 155.3 155.3 0 01-21.46-12.57 16 16 0 00-15.11-1.71l-44.89 18.07a10.81 10.81 0 01-13.14-4.58l-42.77-74a10.8 10.8 0 012.45-13.75l38.21-30a16.05 16.05 0 006-14.08c-.36-4.17-.58-8.33-.58-12.5s.21-8.27.58-12.35a16 16 0 00-6.07-13.94l-38.19-30A10.81 10.81 0 0149.48 186l42.77-74a10.81 10.81 0 0113.14-4.59l44.9 18.08a16.11 16.11 0 0015.17-1.75A164.48 164.48 0 01187 111.2a15.94 15.94 0 008.82-12.14l6.73-47.89A11.08 11.08 0 01213.23 42h85.54a11.11 11.11 0 0110.69 8.87l6.72 47.82a16.07 16.07 0 009 12.22 155.3 155.3 0 0121.46 12.57 16 16 0 0015.11 1.71l44.89-18.07a10.81 10.81 0 0113.14 4.58l42.77 74a10.8 10.8 0 01-2.45 13.75l-38.21 30a16.05 16.05 0 00-6.05 14.08c.33 4.14.55 8.3.55 12.47z"
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="32"
+              />
+            </svg>
+          </button>
+          設定
+          <div class="dropdown-content">
+            <a href="#" onclick="setDefaultFile('mojiichiran.pdf')"
+              >mojiichiran.pdf</a
+            >
+            <label for="newFileInput" class="file-upload-label"
+              >ファイル変更</label
+            >
+            <input
+              type="file"
+              id="newFileInput"
+              accept=".pdf"
+              style="display: none"
+              onchange="handleNewFileUpload(event)"
+            />
+          </div>
+        </div>
+        <form
+          onsubmit="handleUploadValidate(event)"
+          enctype="multipart/form-data"
+          style="display: flex; flex-direction: column; width: 100%"
+        >
+          <input
+            type="hidden"
+            id="defaultFile"
+            name="defaultFile"
+            value="mojiichiran.pdf"
+          />
+          <div
+            class="file-input-container input-group"
+            onclick="document.getElementById('validateFile').click()"
+          >
+            <label
+              for="validateFile"
+              id="validateFileLabel"
+              style="cursor: pointer"
+              >チェックしたいファイルを選択してください</label
+            >
+            <input
+              id="validateFile"
+              type="file"
+              name="validateFile"
+              accept=".pdf,.xlsx"
+              style="display: none"
+              class="file-input"
+              multiple
+              onchange="updateFileNameForValidateRoute('validateFileLabel', event)"
+            />
+            <span class="file-name"
+              ><img
+                src="https://img.icons8.com/ios-filled/50/000000/ms-excel.png"
+                alt="Excel Icon" /><img
+                src="https://img.icons8.com/ios-filled/50/000000/pdf.png"
+                alt="Pdf Icon"
+            /></span>
+            <label>(15MB以下)</label>
+          </div>
+          <!-- <a href="/download-pdf">PDF</a>
+          <a href="/download-excel">Excel</a> -->
+          <input
+            type="submit"
+            value="アップロード"
+            id="uploadButton-validate"
+          />
+        </form>
+        <div
+          style="
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+          "
+          id="loadingValidate"
+        >
+          <img
+            src="https://i.gifer.com/ZZ5H.gif"
+            alt="Loading..."
+            width="50"
+            height="50"
+          />
+          <p>少々お待ちください。</p>
+        </div>
+        <p id="url"></p>
+        <div id="error"></div>
+        <div id="result"></div>
+      </div>
+      <div class="container tab-content navitime" style="position: relative">
+        <div class="tabs">
+          <button
+            class="navi-tab active"
+            onclick="switchTabNavitime(event, 'tab1')"
+          >
+            不定期検索
+          </button>
+          <button class="navi-tab" onclick="switchTabNavitime(event, 'tab2')">
+            定期代検索
+          </button>
+
+          <div id="mover" class="tab-mover"></div>
+        </div>
+        <div id="tab1" class="navitime-content active">
+          <h1>NAVITIME</h1>
+          <form
+            onsubmit="handleSubmit(event)"
+            method="post"
+            enctype="multipart/form-data"
+            style="display: flex; flex-direction: column; width: 100%"
+          >
+            <div
+              class="file-input-container"
+              onclick="document.getElementById('file').click()"
+            >
+              <label for="file" class="file-input-label" style="display: none"
+                >ファイルを選択</label
+              >
+              <input
+                type="file"
+                id="file"
+                class="file-input"
+                name="file"
+                accept=".xlsx, .xls"
+                required
+                onchange="updateFileName()"
+                style="display: none"
+              />
+              <span class="file-name"
+                ><img
+                  src="https://img.icons8.com/ios-filled/50/000000/ms-excel.png"
+                  alt="Excel Icon"
+                />ファイルが選択されていません</span
+              >
+            </div>
+            <input type="hidden" name="tab" value="1" />
+            <br />
+            <!-- <div class="radio-group" onchange="updateTemplateLink()"> -->
+            <div class="radio-group">
+              <label
+                ><input type="radio" name="transport" value="train" required />
+                乗換</label
+              >
+              <label
+                ><input type="radio" name="transport" value="car" />
+                自動車</label
+              >
+              <label
+                ><input type="radio" name="transport" value="bus" /> バス</label
+              >
+              <label
+                ><input type="radio" name="transport" value="walk" />
+                徒歩</label
+              >
+              <label
+                ><input type="radio" name="transport" value="bike" />
+                自転車</label
+              >
+              <label
+                ><input type="radio" name="transport" value="plane" />
+                飛行機</label
+              >
+              <label
+                ><input type="radio" name="transport" value="truck" />
+                トラック</label
+              >
+            </div>
+            <br />
+            <input type="submit" value="アップロード" />
+          </form>
+          <!-- <a
+            style="
+              text-align: center;
+              display: block;
+              width: 100%;
+              margin-top: 15px;
+            "
+            id="template-link"
+            href="#"
+            onclick="downloadTemplateFile(event);"
+            >テンプレートExcelファイルをダウンロード</a
+          > -->
+          <p style="text-align: center">
+            ナビゲーション時間を含むExcelファイル（.xlsx,.xls）をアップロードしてください。
+          </p>
+        </div>
+        <div id="loading" class="loading">
+          <img
+            src="https://i.gifer.com/ZZ5H.gif"
+            alt="読み込み中..."
+            width="50"
+            height="50"
+          />
+          <!-- <p class="progress-text">0%</p>
+          <div class="progress-bar">
+            <div class="progress" style="width: 0%"></div>
+          </div> -->
+          <p id="text">少々お待ちください。</p>
+        </div>
+        <div id="tab2" class="navitime-content">
+          <h1>NAVITIME</h1>
+          <form
+            onsubmit="handleSubmit(event)"
+            enctype="multipart/form-data"
+            style="display: flex; flex-direction: column; width: 100%"
+          >
+            <div
+              class="file-input-container"
+              onclick="document.getElementById('file2').click()"
+            >
+              <label for="file2" class="file-input-label" style="display: none"
+                >ファイルを選択</label
+              >
+              <input
+                type="file"
+                id="file2"
+                class="file-input"
+                name="file"
+                accept=".xlsx, .xls"
+                required
+                onchange="updateFileName()"
+                style="display: none"
+              />
+              <span class="file-name"
+                ><img
+                  src="https://img.icons8.com/ios-filled/50/000000/ms-excel.png"
+                  alt="Excel Icon"
+                />ファイルが選択されていません</span
+              >
+            </div>
+            <input type="hidden" name="tab" value="2" />
+            <br />
+            <input type="submit" value="アップロード" />
+          </form>
+          <!-- <a
+            href="/download-template-2"
+            style="
+              text-align: center;
+              display: block;
+              width: 100%;
+              margin-top: 15px;
+            "
+            >テンプレートExcelファイルをダウンロード</a
+          > -->
+          <p style="text-align: center">
+            列車ナビゲーション時間を含むExcelファイル（.xlsx,.xls）をアップロードしてください。
+          </p>
+          <div id="loading" class="loading">
+            <img
+              src="https://i.gifer.com/ZZ5H.gif"
+              alt="読み込み中..."
+              width="50"
+              height="50"
+            />
+            <p class="progress-text">0%</p>
+            <div class="progress-bar">
+              <div class="progress" style="width: 0%"></div>
+            </div>
+            <p id="text">処理中...</p>
+          </div>
+        </div>
+        <div id="navi-error"></div>
+        <div id="navi-result"></div>
+      </div>
+      <div class="tab-content excelCompare" style="position: relative">
+        <div class="header"></div>
+        <h1>エクセル比較</h1>
+
+        <form
+          onsubmit="handleUploadCompareExcel(event)"
+          enctype="multipart/form-data"
+          style="display: flex; flex-direction: column; width: 100%"
+        >
+          <div
+            class="file-input-container input-group"
+            onclick="document.getElementById('getDataFile').click()"
+          >
+            <label
+              for="getDataFile"
+              id="getDataFileLabel"
+              style="cursor: pointer"
+              >チェックしたいファイルを選択してください</label
+            >
+            <input
+              id="getDataFile"
+              type="file"
+              name="getDataFile"
+              accept=".xlsx"
+              style="display: none"
+              class="file-input"
+              multiple
+              onchange="updateFileNameForValidateRoute('getDataFileLabel', event)"
+            />
+            <span class="file-name"
+              ><img
+                src="https://img.icons8.com/ios-filled/50/000000/ms-excel.png"
+                alt="Excel Icon" /><img
+                src="https://img.icons8.com/ios-filled/50/000000/pdf.png"
+                alt="Pdf Icon"
+            /></span>
+            <label>(15MB以下)</label>
+          </div>
+          <div
+            class="file-input-container input-group"
+            onclick="document.getElementById('getCompareFile').click()"
+          >
+            <label
+              for="getCompareFile"
+              id="getCompareFileLabel"
+              style="cursor: pointer"
+              >admin</label
+            >
+            <input
+              id="getCompareFile"
+              type="file"
+              name="getCompareFile"
+              accept=".xlsx"
+              style="display: none"
+              class="file-input"
+              multiple
+              onchange="updateFileNameForValidateRoute('getCompareFileLabel', event)"
+            />
+            <span class="file-name"
+              ><img
+                src="https://img.icons8.com/ios-filled/50/000000/ms-excel.png"
+                alt="Excel Icon" /><img
+                src="https://img.icons8.com/ios-filled/50/000000/pdf.png"
+                alt="Pdf Icon"
+            /></span>
+            <label>(15MB以下)</label>
+          </div>
+          <input type="submit" value="アップロード" id="uploadButton-compare" />
+        </form>
+        <div
+          style="
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+          "
+          id="loadingCompare"
+        >
+          <img
+            src="https://i.gifer.com/ZZ5H.gif"
+            alt="Loading..."
+            width="50"
+            height="50"
+          />
+          <p>少々お待ちください。</p>
+        </div>
+        <p id="compare-url"></p>
+        <div id="compare-error"></div>
+        <div id="compare-result"></div>
+        <div id="json-output" style="margin-top: 20px">
+          <h2>Comparison Results</h2>
+          <div id="excel-users"></div>
+          <div id="users-not-found">
+            <div class="section-title">Users not found in database</div>
+          </div>
+          <div id="users-not-in-excel">
+            <div class="section-title">Users not in Excel</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+
+  <script src="../static/js/socket.js"></script>
+
+  <script src="../static/js/script.js"></script>
+  <script type="module" src="../static/js/menu-control.js"></script>
+</html>

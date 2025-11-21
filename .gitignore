@@ -1,0 +1,14 @@
+.venv
+
+__pycache__
+
+dist/
+build/
+
+myenv/
+
+.DS_Store
+
+.env
+
+app/migrations/versions/
